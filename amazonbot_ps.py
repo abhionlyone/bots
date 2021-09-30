@@ -1,27 +1,31 @@
 from selenium import webdriver
 from time import sleep
+from webdriver_manager.chrome import ChromeDriverManager
 import os
+import datetime
 
 def say(msg = "Finish", voice = "Victoria"):
-    os.system(f'say -v {voice} {msg}')
+    os.system(f'echo "{msg}"|espeak')
 
 class PS5Bot():
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        say("Amazon PS5 is initiated")
+        self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
 
     def login(self):
         self.driver.get('https://www.amazon.in')
         sleep(50)
 
     def checkAndBuyPS5(self):
+        print(datetime.datetime.now())
         self.driver.get('https://www.amazon.in/dp/B08FV5GC28')
         sleep(1)   
         try:
             buyNow = self.driver.find_element_by_xpath('//*[@id="add-to-cart-button"]')
             buyNow.click()
-            say("Playstation is back in stock.")
-            sleep(1.5)
-            self.checkAndBuyPS5()
+            n = 5
+            while n > 0:
+                say("Playstation is back in stock on Amazon.")
         except Exception as e:
             sleep(300)
             self.checkAndBuyPS5()
@@ -29,7 +33,7 @@ class PS5Bot():
 
 class XboxBot():
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
 
     def login(self):
         self.driver.get('https://www.amazon.in')
@@ -41,15 +45,21 @@ class XboxBot():
         try:
             buyNow = self.driver.find_element_by_xpath('//*[@id="add-to-cart-button"]')
             buyNow.click()
-            say("Xbox is back in stock.")
-            sleep(1.5)
-            self.checkAndBuyXbox()
+            n = 5
+            while n > 0:
+                say("Xbox is back in stock on Amazon.")
         except Exception as e:
             sleep(300)
             self.checkAndBuyXbox()
 
+sleep(1)
 ps5bot = PS5Bot()
 ps5bot.checkAndBuyPS5()
 
-xbot = XboxBot()
-xbot.checkAndBuyXbox()
+
+
+
+# python3 amazonbot_ps.py
+# python3 amazonbot_xbox.py
+# python3 flipkartbot_ps.py 
+# python3 flipkartbot_xbox.py
